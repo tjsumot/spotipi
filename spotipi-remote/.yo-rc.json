@@ -8,9 +8,9 @@
     "serviceDirectory": "service/",
     "inject": {
       "js": {
-        "file": "index.html",
-        "marker": "<!-- Add New Component JS Above -->",
-        "template": "<script src=\"<%= filename %>\"></script>"
+        "file": "index.jade",
+        "marker": "// Add New Component JS Above",
+        "template": "script(src='<%= filename %>')"
       },
       "less": {
         "relativeToModule": true,
