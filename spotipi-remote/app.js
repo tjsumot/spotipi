@@ -1,4 +1,4 @@
-angular.module('spotipiRemote', ['ui.bootstrap', 'ui.utils', 'ui.router', 'ngAnimate', 'spHome']);
+angular.module('spotipiRemote', ['ui.bootstrap', 'ui.utils', 'ui.router', 'ngAnimate', 'spHome', 'spApi']);
 
 angular.module('spotipiRemote').config(function($stateProvider, $urlRouterProvider) {
 
@@ -6,6 +6,9 @@ angular.module('spotipiRemote').config(function($stateProvider, $urlRouterProvid
     $urlRouterProvider.otherwise('/home');
 
 });
+
+angular.module('spotipiRemote').constant('spServerAddress', 'http://localhost:3000');
+
 
 angular.module('spotipiRemote').run(function($rootScope) {
 

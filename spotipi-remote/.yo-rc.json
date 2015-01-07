@@ -23,6 +23,10 @@
       {
         "name": "spHome",
         "file": "sp-home/sp-home.js"
+      },
+      {
+        "name": "spApi",
+        "file": "sp-api/sp-api.js"
       }
     ]
   }
