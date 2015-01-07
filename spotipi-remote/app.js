@@ -1,4 +1,4 @@
-angular.module('spotipiRemote', ['ui.bootstrap','ui.utils','ui.router','ngAnimate']);
+angular.module('spotipiRemote', ['ui.bootstrap', 'ui.utils', 'ui.router', 'ngAnimate', 'spHome']);
 
 angular.module('spotipiRemote').config(function($stateProvider, $urlRouterProvider) {
 
