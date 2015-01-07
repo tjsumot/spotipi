@@ -1,0 +1,14 @@
+{
+  "name": "spotipi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "tjsumot",
+  "license": "MIT",
+  "dependencies": {
+    "spotify-web": "^1.3.0"
+  }
+}
