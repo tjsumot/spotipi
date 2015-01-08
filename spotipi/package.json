@@ -9,7 +9,9 @@
   "author": "tjsumot",
   "license": "MIT",
   "dependencies": {
+    "lodash": "^2.4.1",
     "socket.io": "^1.2.1",
-    "spotify-web": "^1.3.0"
+    "spotify-web": "^1.3.0",
+    "winston": "^0.8.3"
   }
 }
