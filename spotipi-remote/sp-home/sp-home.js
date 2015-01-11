@@ -1,4 +1,4 @@
-angular.module('spHome', ['ui.bootstrap','ui.utils','ui.router','ngAnimate', 'spApi']);
+angular.module('spHome', ['ui.bootstrap','ui.utils','ui.router','ngAnimate', 'spApi', 'spotify']);
 
 angular.module('spHome').config(function($stateProvider) {
 

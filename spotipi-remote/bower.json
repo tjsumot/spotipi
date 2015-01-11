@@ -22,6 +22,7 @@
     "less.js": "~1.6",
     "font-awesome": "~4.0",
     "lodash": "~2.4.1",
-    "angular-socket-io": "~0.7.0"
+    "angular-socket-io": "~0.7.0",
+    "angular-spotify": "~0.10.0"
   }
 }

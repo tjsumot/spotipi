@@ -12,9 +12,6 @@ var SpotifyPlayer = function(log, spotifyCfg) {
   EventEmitter.call(this);
 
   this.conn = loginToSpotify(log, spotifyCfg);
-  this.speaker = new Speaker().on('error', function(err) {
-    log.error("Error in Speaker stream", err);
-  });
 };
 
 util.inherits(SpotifyPlayer, EventEmitter);
@@ -23,6 +20,7 @@ SpotifyPlayer.prototype = _.extend(SpotifyPlayer.prototype, {
   conn: null,
   speaker: null,
   currentStream: null,
+  currentTrack: null,
 
   play: function(trackUri) {
     var that = this;
@@ -34,26 +32,13 @@ SpotifyPlayer.prototype = _.extend(SpotifyPlayer.prototype, {
       spotify.get(trackUri, function(err, track) {
         if (err) throw err;
 
-        that.emit('play', serializeTrack(track));
+        that.speaker = new Speaker();
+        that.currentTrack = serializeTrack(track);
         // play() returns a readable stream of MP3 audio data
-        that.currentStream = track.play();
+        that.currentStream = track.play().pipe(new lame.Decoder());
+        that.currentStream.pipe(that.speaker);
 
-        that.currentStream
-          .on('finish', function() {
-            defer.resolve({
-              ev: 'finish',
-              track: track
-            });
-          })
-          .on('unpipe', function() {
-            that.emit('stop', serializeTrack(track));
-            defer.reject({
-              ev: 'stop',
-              track: track
-            });
-          })
-          .pipe(new lame.Decoder())
-          .pipe(that.speaker);
+        that.emit('play', that.currentTrack);
 
       });
     });

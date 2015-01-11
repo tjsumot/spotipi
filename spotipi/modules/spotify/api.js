@@ -12,6 +12,10 @@ module.exports = function(io, ev, cfg, log) {
 
     log.info("Client connected");
 
+    socket.emit(ev('start'), {
+      track: player.currentTrack
+    });
+
     socket.on(ev('play'), function(trackUri, cb) {
       player.once('play', cb);
       player.play(trackUri);
