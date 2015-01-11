@@ -10,7 +10,7 @@ html(ng-app='spotipiRemote')
     script(src='http://localhost:35729/livereload.js', data-concat='false')
     // JS from Bower Components
     script(src='./bower_components/less.js/dist/less-1.6.2.js', data-concat='false')
-    script(src='/socket.io/socket.io.js')
+    script(src='./socket.io/socket.io.js')
     script(src='./bower_components/jquery/jquery.js')
     script(src='./bower_components/bootstrap/dist/js/bootstrap.js')
     script(src='./bower_components/lodash/dist/lodash.js')
@@ -26,10 +26,18 @@ html(ng-app='spotipiRemote')
     // Add New Bower Component JS Above
     // Main App JS
     script(src='./app.js')
-    script(src='sp-home/sp-home.js')
+    script(src='./sp-home/sp-home.js')
     script(src='./sp-home/partial/sp-home/sp-home.js')
-    script(src='./sp-home/service/sp-Spotify.js')
     script(src='./sp-api/sp-api.js')
     script(src='./sp-api/service/sp-Api.js')
+    script(src='./sp-spotify/sp-spotify.js')
+    script(src='./sp-spotify/service/sp-Spotify.js')
+    script(src='./sp-spotify/partial/search/search.js')
+    script(src='./sp-spotify/partial/sp-spotify-home/sp-spotify-home.js')
+      
+    script(src='./sp-home/directive/sp-navbar/sp-navbar.js')
     // Add New Component JS Above
-    div(ui-view)
+
+    .container
+      sp-navbar
+      div(ui-view)

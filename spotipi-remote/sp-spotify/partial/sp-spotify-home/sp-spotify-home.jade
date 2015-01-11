@@ -1,0 +1,5 @@
+.row(ng-controller="SpSpotifyHomeCtrl")
+  .col-sm-9(ui-view="")
+  .col-sm-3
+    pre {{ queue | json }}
+    pre {{ playing | json }}

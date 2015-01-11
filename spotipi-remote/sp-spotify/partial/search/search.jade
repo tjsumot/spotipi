@@ -1,0 +1,41 @@
+div(ng-controller="SearchCtrl")
+
+  input.form-control(
+    autofocus,
+    type="text", 
+    ng-model="search", 
+    ng-model-options="{debounce: {default: 2000}}"
+  )
+  
+  .row
+    .col-xs-4
+      h3 Artists    
+      div(ng-repeat="artist in data.artists.items")
+        img(ng-src="{{artist.images[2].url}}")
+        h4
+          | {{artist.name}}
+
+    .col-xs-4
+      h3 Albums
+      div(ng-repeat="album in data.albums.items")
+        img(ng-src="{{album.images[2].url}}")
+        h4
+          | {{album.name}}
+        h5.text-muted
+          | {{ album.artist.name }}, 
+
+    .col-xs-4
+      h3 Tracks
+      div(ng-repeat="track in data.tracks.items")
+        a(ng-click="play(track.uri)")
+          img(ng-src="{{track.album.images[2].url}}")
+        h4
+          a(ng-click="play(track.uri)")
+            span.fa.fa-fw.fa-play
+          a(ng-click="enqueue(track.uri)")
+            span.fa.fa-fw.fa-plus
+          | {{track.name}}
+        h5.text-muted
+          span(ng-repeat="artist in track.artists")
+            | {{ artist.name }}, 
+  pre {{ data | json }}

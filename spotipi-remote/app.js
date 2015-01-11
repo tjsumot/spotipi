@@ -1,9 +1,9 @@
-angular.module('spotipiRemote', ['ui.bootstrap', 'ui.utils', 'ui.router', 'ngAnimate', 'spHome', 'spApi']);
+angular.module('spotipiRemote', ['ui.bootstrap', 'ui.utils', 'ui.router', 'ngAnimate', 'spHome', 'spApi', 'spSpotify']);
 
 angular.module('spotipiRemote').config(function($stateProvider, $urlRouterProvider) {
 
   /* Add New States Above */
-  $urlRouterProvider.otherwise('/home');
+  $urlRouterProvider.otherwise('/spotify');
 
 });
 

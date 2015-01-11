@@ -1,4 +1,4 @@
-angular.module('spHome').factory('spSpotify', [
+angular.module('spSpotify').factory('spSpotify', [
   'spApi',
   function(spApi) {
     var socket = spApi.create('spotify');

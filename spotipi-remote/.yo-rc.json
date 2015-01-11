@@ -27,6 +27,10 @@
       {
         "name": "spApi",
         "file": "sp-api/sp-api.js"
+      },
+      {
+        "name": "spSpotify",
+        "file": "sp-spotify/sp-spotify.js"
       }
     ]
   }

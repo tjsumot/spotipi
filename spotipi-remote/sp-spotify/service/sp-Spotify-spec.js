@@ -1,6 +1,6 @@
 describe('spSpotify', function() {
 
-  beforeEach(module('spHome'));
+  beforeEach(module('spSpotify'));
 
   it('should ...', inject(function(spSpotify) {
 

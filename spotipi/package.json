@@ -9,9 +9,11 @@
   "author": "tjsumot",
   "license": "MIT",
   "dependencies": {
+    "lame": "^1.1.1",
     "lodash": "^2.4.1",
     "q": "^1.1.2",
     "socket.io": "^1.2.1",
+    "speaker": "^0.2.1",
     "spotify-web": "^1.3.0",
     "winston": "^0.8.3"
   }
