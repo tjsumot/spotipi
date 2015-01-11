@@ -12,11 +12,9 @@ require('fs').readdir(cfg.modules.dir, function(err, files) {
   if (err) {
     throw err;
   }
-  var ext = cfg.modules.ext;
+
   files.filter(function(fileName) {
-    return fileName.indexOf(ext) === fileName.length - ext.length;
-  }).map(function(fileName) {
-    return fileName.replace(ext, '');
+    return fileName.indexOf('.') !== 0; 
   }).map(function(fileName) {
     return {
       name: fileName,

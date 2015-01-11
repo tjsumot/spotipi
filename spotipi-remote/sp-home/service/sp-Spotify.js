@@ -6,6 +6,9 @@ angular.module('spHome').factory('spSpotify', [
     var spSpotify = {
       onRun: function(scope, listener) {
         socket.on(scope, 'run', listener);
+      },
+      play: function(trackUri) {
+        return socket.emit('play', trackUri);
       }
     };
 
