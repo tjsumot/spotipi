@@ -24,7 +24,6 @@ SpotifyPlayer.prototype = _.extend(SpotifyPlayer.prototype, {
 
   play: function(trackUri) {
     var that = this;
-    var defer = Q.defer();
 
     that.stop();
     that.conn.then(function(spotify) {
@@ -38,12 +37,14 @@ SpotifyPlayer.prototype = _.extend(SpotifyPlayer.prototype, {
         that.currentStream = track.play().pipe(new lame.Decoder());
         that.currentStream.pipe(that.speaker);
 
+        that.currentStream.on('finish', function() {
+          that.emit('stop', that.currentTrack);
+        });
+
         that.emit('play', that.currentTrack);
 
       });
     });
-
-    return defer.promise;
   },
 
   stop: function() {

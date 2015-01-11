@@ -9,6 +9,8 @@ div(ng-controller="SpHomeCtrl")
         h3 
           a(ng-click="play(track.uri)")
             span.fa.fa-fw.fa-play
+          a(ng-click="enqueue(track.uri)")
+            span.fa.fa-fw.fa-plus
           | {{track.name}}
         h4
           span(ng-repeat="artist in track.artists")
@@ -16,4 +18,5 @@ div(ng-controller="SpHomeCtrl")
         img(ng-src="{{track.album.images[2].url}}")
       pre {{ data | json }}
     .col-sm-3
+      pre {{ queue | json }}
       pre {{ playing | json }}
