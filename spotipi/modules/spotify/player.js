@@ -22,29 +22,35 @@ SpotifyPlayer.prototype = _.extend(SpotifyPlayer.prototype, {
   currentStream: null,
   currentTrack: null,
 
+  get: function(uri) {
+    return this.conn.then(function(spotify) {
+      return Q.ninvoke(spotify, 'get', uri);
+    });
+  },
+
   play: function(trackUri) {
     var that = this;
 
     that.stop();
-    that.conn.then(function(spotify) {
-      // first get a "Track" instance from the track URI
-      spotify.get(trackUri, function(err, track) {
-        if (err) throw err;
 
-        that.speaker = new Speaker();
-        that.currentTrack = serializeTrack(track);
-        // play() returns a readable stream of MP3 audio data
-        that.currentStream = track.play().pipe(new lame.Decoder());
-        that.currentStream.pipe(that.speaker);
+    // first get a "Track" instance from the track URI
+    that.get(trackUri).then(function(track) {
 
-        that.currentStream.on('finish', function() {
-          that.emit('stop', that.currentTrack);
-        });
+      that.speaker = new Speaker();
+      that.currentTrack = serializeTrack(track);
+      // play() returns a readable stream of MP3 audio data
+      that.currentStream = track.play().pipe(new lame.Decoder());
+      that.currentStream.pipe(that.speaker);
 
-        that.emit('play', that.currentTrack);
-
+      that.currentStream.on('finish', function() {
+        that.isPlaying = false;
+        that.emit('stop', that.currentTrack);
       });
-    });
+      
+      that.isPlaying = true;
+      that.emit('play', that.currentTrack);
+
+    }).done();
   },
 
   stop: function() {

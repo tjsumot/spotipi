@@ -4,7 +4,7 @@ module.exports = function(io, ev, cfg, log) {
 
 
   var player = new SpotifyPlayer(log, cfg.spotify);
-  var playlist = new Queue();
+  var playlist = new Queue(player.get.bind(player));
 
   ['play', 'stop'].map(function(eventName) {
     player.on(eventName, function(track) {
@@ -13,25 +13,31 @@ module.exports = function(io, ev, cfg, log) {
     });
   });
 
-  ['enqueue', 'next'].map(function(eventName){
+  ['enqueue', 'next'].map(function(eventName) {
     playlist.on(eventName, function(data) {
       log.info("Playlist [%s] %s", eventName, data);
       io.emit(ev(eventName), data);
     });
   });
 
-  player.on('stop', function(){
-    var next = playlist.getNext();
-    if (next) {
-      player.play(next);
-    }
+  player.on('stop', function() {
+    playNext();
   });
+
+  function playNext() {
+    return playlist.getNext().then(function(next) {
+      if (next) {
+        player.play(next);
+      }
+      return next;
+    });
+  }
 
   io.on('connection', function(socket) {
 
     log.info("Client connected %s", socket.id);
 
-    socket.on('disconnect', function(){
+    socket.on('disconnect', function() {
       log.info("Client disconnected %s", socket.id);
     });
 
@@ -40,14 +46,34 @@ module.exports = function(io, ev, cfg, log) {
       queue: playlist.queue
     });
 
-    socket.on(ev('play'), function(trackUri, cb) {
-      player.once('play', cb);
-      player.play(trackUri);
+    socket.on(ev('play'), function(data, cb) {
+      if (data.type === 'track') {
+        player.once('play', cb);
+        player.play(data.uri);
+        return;
+      }
+
+      playlist.unshift(data);
+      playNext().then(cb);
+      return;
     });
 
-    socket.on(ev('enqueue'), function(trackUri, cb) {
-      playlist.once('enqueue', cb);
-      playlist.add(trackUri);
+    socket.on(ev('next'), function(data, cb){
+      playNext().then(cb);
+    });
+
+    socket.on(ev('stop'), function(data, cb){
+      player.stop();
+    });
+
+    socket.on(ev('enqueue'), function(data, cb) {
+      playlist.once('enqueue', function(data) {
+        if (!player.isPlaying) {
+          playNext().then(cb);
+        }
+      });
+
+      playlist.push(data);
     });
   });
 

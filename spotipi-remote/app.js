@@ -3,7 +3,7 @@ angular.module('spotipiRemote', ['ui.bootstrap', 'ui.utils', 'ui.router', 'ngAni
 angular.module('spotipiRemote').config(function($stateProvider, $urlRouterProvider) {
 
   /* Add New States Above */
-  $urlRouterProvider.otherwise('/spotify');
+  $urlRouterProvider.otherwise('/spotify/search');
 
 });
 

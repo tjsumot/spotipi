@@ -1,7 +1,10 @@
 angular.module('spSpotify').controller('SpSpotifyHomeCtrl',function($scope, spSpotify) {
 
   $scope.play = function(trackUri) {
-    spSpotify.play(trackUri).then(function(data) {
+    spSpotify.play({
+      type: 'track',
+      uri: trackUri
+    }).then(function(data) {
       console.log("Playing");
     });
   };
@@ -11,6 +14,21 @@ angular.module('spSpotify').controller('SpSpotifyHomeCtrl',function($scope, spSp
       console.log("Enqueued");
     });
   };
+
+  $scope.next = function(){
+    spSpotify.next();
+  };
+  $scope.stop = function(){
+    spSpotify.stop();
+  };
+
+  $scope.playAlbum = function(albumUri) {
+    spSpotify.play({
+      type: 'album',
+      uri: albumUri
+    });  
+  };
+
 
   spSpotify.onStart($scope, function(data) {
     $scope.playing = data.track;

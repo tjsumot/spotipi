@@ -23,7 +23,16 @@ angular.module('spSpotify').factory('spSpotify', [
 
       enqueue: function(trackUri) {
         return socket.emit('enqueue', trackUri);
+      },
+
+      next: function() {
+        return socket.emit('next', {});
+      },
+
+      stop: function() {
+        return socket.emit('stop', {});
       }
+
 
     };
 
