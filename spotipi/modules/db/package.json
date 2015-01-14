@@ -1,0 +1,11 @@
+{
+  "name": "spotipi-db",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "tjsumot",
+  "license": "MIT",
+  "dependencies": {
+    "nedb": "^1.1.1"
+  }
+}

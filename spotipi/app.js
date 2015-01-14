@@ -14,23 +14,32 @@ require('fs').readdir(cfg.modules.dir, function(err, files) {
   }
 
   files.filter(function(fileName) {
-    return fileName.indexOf('.') !== 0; 
+    return fileName.indexOf('.') !== 0;
   }).map(function(fileName) {
     return {
       name: fileName,
       mod: require(cfg.modules.dir + '/' + fileName)
     };
-  }).map(function(mod) {
+  }).reduce(function(modules, mod) {
 
     winston.info("[%s] Loading module", mod.name);
 
-    mod.mod(io.of(mod.name), function(evName) {
+    var modApi = mod.mod({
+      io: io.of(mod.name),
+      cfg: cfg,
+      log: winston,
+      modules: modules
+    }, function(evName) {
       return mod.name + "~" + evName;
-    }, cfg, winston);
+    });
 
     winston.debug("[%s] Module loaded", mod.name);
 
-  });
+    // Expose API
+    modules[mod.name] = modApi;
+
+    return modules;
+  }, {});
 });
 
 http.listen(cfg.host ? cfg.host + ':' + cfg.port : cfg.port, function() {

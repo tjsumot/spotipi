@@ -1,21 +1,21 @@
 var SpotifyPlayer = require('./player'),
   Queue = require('./queue');
-module.exports = function(io, ev, cfg, log) {
 
+module.exports = function(i, ev) {
 
-  var player = new SpotifyPlayer(log, cfg.spotify);
+  var player = new SpotifyPlayer(i.log, i.cfg.spotify);
   var playlist = new Queue(player.get.bind(player));
 
   ['play', 'stop'].map(function(eventName) {
     player.on(eventName, function(track) {
-      log.info("Player [%s] %s", eventName, track.name);
-      io.emit(ev(eventName), track);
+      i.log.info("Player [%s] %s", eventName, track.name);
+      i.io.emit(ev(eventName), track);
     });
   });
 
   ['enqueue', 'next'].map(function(eventName) {
     playlist.on(eventName, function(data) {
-      log.info("Playlist [%s] %s", eventName, data);
+      i.log.info("Playlist [%s] %s", eventName, data);
       io.emit(ev(eventName), data);
     });
   });
@@ -33,12 +33,12 @@ module.exports = function(io, ev, cfg, log) {
     });
   }
 
-  io.on('connection', function(socket) {
+  i.io.on('connection', function(socket) {
 
-    log.info("Client connected %s", socket.id);
+    i.log.info("Client connected %s", socket.id);
 
     socket.on('disconnect', function() {
-      log.info("Client disconnected %s", socket.id);
+      i.log.info("Client disconnected %s", socket.id);
     });
 
     socket.emit(ev('start'), {
@@ -58,11 +58,11 @@ module.exports = function(io, ev, cfg, log) {
       return;
     });
 
-    socket.on(ev('next'), function(data, cb){
+    socket.on(ev('next'), function(data, cb) {
       playNext().then(cb);
     });
 
-    socket.on(ev('stop'), function(data, cb){
+    socket.on(ev('stop'), function(data, cb) {
       player.stop();
     });
 
