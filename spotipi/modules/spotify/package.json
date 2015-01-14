@@ -1,0 +1,15 @@
+{
+  "name": "spotipi-spotify",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "tjsumot",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^2.4.1",
+    "lame": "^1.1.1",
+    "q": "^1.1.2",
+    "speaker": "^0.2.1",
+    "spotify-web": "^1.3.0"
+  }
+}
