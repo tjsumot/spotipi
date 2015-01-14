@@ -3,59 +3,81 @@ var util = require('util'),
   Q = require('q'),
   EventEmitter = require('events').EventEmitter;
 
-function Queue(getData) {
-  EventEmitter.call(this);
-  this.getData = getData;
-  this.queue = [];
-}
+function Queue(getData, db) {
+  // Init
+  var api = new EventEmitter();
+  var state = {
+    queue: []
+  };
 
-util.inherits(Queue, EventEmitter);
+  // Methods
+  api.push = function(data) {
+    state.queue.push(data);
+    process(data);
+    api.emit('enqueue', data);
+  };
 
-Queue.prototype.push = function(data) {
-  this.queue.push(data);
-  this.process(data);
-  this.emit('enqueue', data);
-};
+  api.unshift = function(data) {
+    state.queue.unshift(data);
+    api.process(data);
+    api.emit('enqueue', data);
+  };
 
-Queue.prototype.unshift = function(data) {
-  this.queue.unshift(data);
-  this.process(data);
-  this.emit('enqueue', data);
-};
+  api.getNext = function() {
+    var data = queue.shift();
 
-Queue.prototype.getNext = function() {
-  var that = this;
-  var data = that.queue.shift();
-
-  return data.tracks.then(function(tracks) {
-    var track = tracks.shift();
-    if (tracks.length) {
-      that.queue.unshift(data);
-    }
-    that.emit('next', track.uri);
-    return track.uri;
-  });
-};
-
-Queue.prototype.process = function(data) {
-  if (data.type === 'track') {
-    data.tracks = Q.when(data.uri);
-    return;
-  }
-  if (data.type === 'album') {
-    data.tracks = this.getData(data.uri).then(function(album) {
-      var tracks = album.disc.reduce(function(tracks, disc) {
-
-        if (_.isArray(disc.track)) {
-          return tracks.concat(disc.track);
-        }
-        return tracks;
-      }, []);
-    
-      return tracks;
+    return data.tracks.then(function(tracks) {
+      var track = tracks.shift();
+      if (tracks.length) {
+        state.queue.unshift(data);
+      }
+      api.emit('next', track.uri);
+      return track.uri;
     });
-    return;
+  };
+
+  api.getQueue = function () {
+    return state.queue.slice();
+  };
+
+  // Private
+  function loadFromDb() {
+    db.find({}).sort({
+      'order': 1
+    }).exec(function(err, docs) {
+      if (err) {
+        throw err;
+      }
+
+      state.queue = docs;
+    });
   }
-};
+
+  function process(data) {
+    if (data.type === 'track') {
+      data.tracks = Q.when(data.uri);
+      return;
+    }
+    if (data.type === 'album') {
+      data.tracks = getData(data.uri).then(function(album) {
+        var tracks = album.disc.reduce(function(tracks, disc) {
+
+          if (_.isArray(disc.track)) {
+            return tracks.concat(disc.track);
+          }
+          return tracks;
+        }, []);
+
+        return tracks;
+      });
+      return;
+    }
+  }
+
+  // Init
+  loadFromDb();
+
+  return api;
+}
 
 module.exports = Queue;
