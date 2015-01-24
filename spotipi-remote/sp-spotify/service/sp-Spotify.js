@@ -13,6 +13,10 @@ angular.module('spSpotify').factory('spSpotify', [
         socket.on(scope, 'enqueue', listener);
       },
 
+      onSimilar: function(scope, listener) {
+        socket.on(scope, 'similar', listener);
+      },
+
       onPlay: function(scope, listener) {
         socket.on(scope, 'play', listener);
       },

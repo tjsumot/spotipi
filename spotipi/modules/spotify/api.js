@@ -1,13 +1,16 @@
 var SpotifyPlayer = require('./player'),
-  Queue = require('./queue');
+  Queue = require('./queue'),
+  Autofiller = require('./autofiller');
 
 module.exports = function(i, ev) {
 
   var player = new SpotifyPlayer(i.log, i.cfg.spotify);
-  var playlist = new Queue(player.get.bind(player), i.modules.db('queue'));
+  var playlist = Queue(player.get.bind(player), i.modules.db('queue'));
+  var autofiller = Autofiller(player, player.conn);
 
   forwardEventsOf(player, ['play', 'stop'], 'Player');
   forwardEventsOf(playlist, ['enqueue', 'next'], 'Playlist');
+  forwardEventsOf(autofiller, ['similar'], 'Autofiller');
 
   player.on('stop', function() {
     playNext();
@@ -74,8 +77,15 @@ module.exports = function(i, ev) {
   function playNext() {
     return playlist.getNext().then(function(next) {
       if (next) {
+        return next;
+      }
+
+      return autofiller.getNext();
+    }).then(function(next) {
+      if (next) {
         player.play(next);
       }
+
       return next;
     });
   }

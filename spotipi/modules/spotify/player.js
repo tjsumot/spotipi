@@ -46,7 +46,7 @@ SpotifyPlayer.prototype = _.extend(SpotifyPlayer.prototype, {
         that.isPlaying = false;
         that.emit('stop', that.currentTrack);
       });
-      
+
       that.isPlaying = true;
       that.emit('play', that.currentTrack);
 
@@ -78,6 +78,7 @@ function serializeTrack(track) {
   return {
     gid: track.gid,
     name: track.name,
+    uri: track.uri,
     album: track.album,
     artist: track.artist,
     popularity: track.popularity,

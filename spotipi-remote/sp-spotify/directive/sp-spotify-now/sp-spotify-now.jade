@@ -1,0 +1,9 @@
+div.text-center
+  img.img-responsive(ng-src="{{track.album.cover[0].uri}}")
+  h3
+    strong {{ track.name }} 
+    |  by 
+    span(ng-repeat="artist in track.artist") 
+      span(ng-show="$index > 0") , 
+      | {{ artist.name }}
+

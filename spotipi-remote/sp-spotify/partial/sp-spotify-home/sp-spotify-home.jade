@@ -1,9 +1,11 @@
 .row(ng-controller="SpSpotifyHomeCtrl")
   .col-sm-9(ui-view="")
   .col-sm-3
+    sp-spotify-now(track="playing")
     button.btn.btn-xs.btn-default(ng-click="next()")
-      span.fa.fa-fw.fa-next
+      span.fa.fa-fw.fa-fast-forward
     button.btn.btn-xs.btn-default(ng-click="stop()")
       span.fa.fa-fw.fa-stop
     pre {{ queue | json }}
+    pre {{ autofiller | json }}
     pre {{ playing | json }}

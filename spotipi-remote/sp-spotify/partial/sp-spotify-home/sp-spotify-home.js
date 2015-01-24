@@ -1,4 +1,4 @@
-angular.module('spSpotify').controller('SpSpotifyHomeCtrl',function($scope, spSpotify) {
+angular.module('spSpotify').controller('SpSpotifyHomeCtrl', function($scope, spSpotify) {
 
   $scope.play = function(trackUri) {
     spSpotify.play({
@@ -15,10 +15,10 @@ angular.module('spSpotify').controller('SpSpotifyHomeCtrl',function($scope, spSp
     });
   };
 
-  $scope.next = function(){
+  $scope.next = function() {
     spSpotify.next();
   };
-  $scope.stop = function(){
+  $scope.stop = function() {
     spSpotify.stop();
   };
 
@@ -26,13 +26,14 @@ angular.module('spSpotify').controller('SpSpotifyHomeCtrl',function($scope, spSp
     spSpotify.play({
       type: 'album',
       uri: albumUri
-    });  
+    });
   };
 
 
   spSpotify.onStart($scope, function(data) {
     $scope.playing = data.track;
     $scope.queue = data.queue;
+    $scope.autofiller = [];
   });
 
   spSpotify.onEnqueue($scope, function(data) {
@@ -41,6 +42,10 @@ angular.module('spSpotify').controller('SpSpotifyHomeCtrl',function($scope, spSp
 
   spSpotify.onPlay($scope, function(data) {
     $scope.playing = data;
+  });
+
+  spSpotify.onSimilar($scope, function(data) {
+    $scope.autofiller.push(data);
   });
 
 });
