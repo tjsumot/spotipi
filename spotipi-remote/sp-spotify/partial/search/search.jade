@@ -23,43 +23,34 @@ div(ng-controller="SearchCtrl")
       .col-xs-4.text-center
         h3 Artists    
         div(ng-repeat="artist in data.artists.items | limitTo:results.limit")
-          a(ng-click="enqueueArtist(artist.uri)")
-            img(ng-src="{{artist.images[2].url}}")
-          h4
-            a(ng-click="playArtist(album.uri)")
-              span.fa.fa-fw.fa-play
-            a(ng-click="enqueueArtist(track.uri)")
-              span.fa.fa-fw.fa-plus
-            | {{artist.name}}
-
+          sp-spotify-tile(
+            on-enqueue="enqueueArtist(artist.uri)",
+            on-play="playArtist(album.uri)",
+            img="artist.images[2].url",
+            text="artist.name",
+            sub-text=""
+          )
       .col-xs-4.text-center
         h3 Albums
         div(ng-repeat="album in data.albums.items | limitTo:results.limit")
-          a(ng-click="enqueueAlbum(album.uri)")
-            img(ng-src="{{album.images[2].url}}")
-          h4
-            a(ng-click="playAlbum(album.uri)")
-              span.fa.fa-fw.fa-play
-            a(ng-click="enqueueAlbum(track.uri)")
-              span.fa.fa-fw.fa-plus
-            | {{album.name}}
-          h5.text-muted
-            | {{ album.artist.name }}, 
+          sp-spotify-tile(
+            on-enqueue="enqueueAlbum(album.uri)",
+            on-play="playAlbum(album.uri)",
+            img="album.images[2].url",
+            text="album.name",
+            sub-text="album.artist.name"
+          )
 
       .col-xs-4.text-center
         h3 Tracks
         div(ng-repeat="track in data.tracks.items | limitTo:results.limit")
-          a(ng-click="enqueue(track.uri)")
-            img(ng-src="{{track.album.images[2].url}}")
-          h4
-            a(ng-click="play(track.uri)")
-              span.fa.fa-fw.fa-play
-            a(ng-click="enqueue(track.uri)")
-              span.fa.fa-fw.fa-plus
-            | {{track.name}}
-          h5.text-muted
-            span(ng-repeat="artist in track.artists")
-              | {{ artist.name }}, 
+          sp-spotify-tile(
+            on-enqueue="enqueue(track.uri)",
+            on-play="play(track.uri)",
+            img="track.album.images[2].url",
+            text="track.name",
+            sub-text="track.artists | spSpotifyArtists"
+          )
     .row
       .col-xs-12
         button.btn.btn-block.btn-primary(

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "postinstall": "bower install",
-    "start": "grunt serve"
+    "start": "grunt jade serve"
   },
   "devDependencies": {
     "generator-cg-angular": "^3.2.0",
